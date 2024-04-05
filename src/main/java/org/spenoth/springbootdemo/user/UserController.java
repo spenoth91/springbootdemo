@@ -35,6 +35,11 @@ public class UserController {
         return userService.addUser(user);
     }
 
+    @GetMapping(path="{uid}")
+    public User getUser(@PathVariable Long uid) {
+       return userService.getUser(uid).get();
+    }
+
     @DeleteMapping(path="{uid}")
     public void deleteUser(@PathVariable Long uid) {
         userService.deleteUser(uid);

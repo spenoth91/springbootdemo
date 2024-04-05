@@ -24,6 +24,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public Optional<User> getUser(Long uid) {
+        return userRepository.findById(uid);
+    }
+
     public User addUser(final User user) {
         System.out.println(user.toString());
         Optional<User> u = userRepository.findByEmail(user.getEmail());

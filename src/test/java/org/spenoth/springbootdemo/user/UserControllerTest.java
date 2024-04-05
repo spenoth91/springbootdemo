@@ -20,7 +20,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -78,7 +80,31 @@ public class UserControllerTest {
                                         .contentType(MediaType.APPLICATION_JSON));
 
         response.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content.size()", CoreMatchers.is(resp.size())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void UserController_getUserById() throws Exception {
+        Long uid = 1L;
+        User testUser = User.builder()
+                .id(uid)
+                .name("John Pokemon")
+                .email("test@ghoo.com")
+                .dob(LocalDate.of(1966, 7, 8))
+                .build();
+
+        when(userService.getUser(uid)).thenReturn(Optional.of(testUser));
+
+        ResultActions response = mockMvc.perform(get("/api/v1/user/1")
+                .contentType(MediaType.APPLICATION_JSON));
+
+
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", CoreMatchers.is(testUser.getEmail())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(testUser.getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.blocked", CoreMatchers.is(testUser.isBlocked())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.dob", CoreMatchers.is(testUser.getDob().format(DateTimeFormatter.ofPattern("YYYY-MM-dd")))))
                 .andDo(MockMvcResultHandlers.print());
     }
 
