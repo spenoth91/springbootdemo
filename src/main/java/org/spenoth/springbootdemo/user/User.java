@@ -1,10 +1,7 @@
 package org.spenoth.springbootdemo.user;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -16,6 +13,8 @@ import java.util.Optional;
 @Table(name = "t_user")
 @ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -25,6 +24,7 @@ public class User {
 
     @Getter
     @Setter
+    @Column(name="email", nullable = false, unique = true)
     private String email;
 
     @Getter
@@ -38,9 +38,6 @@ public class User {
     @Getter
     @Setter
     private LocalDate dob;
-
-    @Transient
-    private Optional<Integer> age;
 
     /**
      * Calculate the age in years

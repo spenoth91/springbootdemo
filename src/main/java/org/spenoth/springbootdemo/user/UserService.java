@@ -49,7 +49,7 @@ public class UserService {
 
         Optional<User> pUser = userRepository.findById(user.getId());
         if (pUser.isEmpty()) {
-            throw new IllegalArgumentException(String.format("User with id %s does not exit.", user.getId()));
+            throw new IllegalArgumentException(String.format("User with id %s does not exist.", user.getId()));
         }
 
         if (pUser.get().equals(user)) {
