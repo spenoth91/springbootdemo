@@ -38,6 +38,10 @@ public class UserService {
         return toRet;
     }
 
+    public Optional<User> loadByUsername(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     public void deleteUser(Long uid) {
         boolean exists = userRepository.existsById(uid);
         if (!exists) {

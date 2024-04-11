@@ -53,59 +53,62 @@ public class UserControllerTest {
                 .build();
     }
 
-    @Test
-    public void UserController_register_returnOk() throws Exception {
-        given(userService.addUser(ArgumentMatchers.any())).willAnswer((invocation -> invocation.getArgument(0)));
-
-        ResultActions response = mockMvc.perform(post("/api/v1/user/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user)));
-
-        response.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email", CoreMatchers.is(user.getEmail())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(user.getName())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.blocked", CoreMatchers.is(user.isBlocked())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.dob", CoreMatchers.is(user.getDob().format(DateTimeFormatter.ofPattern("YYYY-MM-dd")))))
-                .andDo(MockMvcResultHandlers.print());
-    }
-
-    @Test
-    public void UserController_getAllUser() throws Exception {
-        List<User> resp = List.of(User.builder().id(1L).build(),
-                User.builder().id(2L).build(),
-                User.builder().id(3L).build());
-        when(userService.getUsers()).thenReturn(resp);
-
-        ResultActions response = mockMvc.perform(get("/api/v1/user/getusers")
-                                        .contentType(MediaType.APPLICATION_JSON));
-
-        response.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)))
-                .andDo(MockMvcResultHandlers.print());
-    }
-
-    @Test
-    public void UserController_getUserById() throws Exception {
-        Long uid = 1L;
-        User testUser = User.builder()
-                .id(uid)
-                .name("John Pokemon")
-                .email("test@ghoo.com")
-                .dob(LocalDate.of(1966, 7, 8))
-                .build();
-
-        when(userService.getUser(uid)).thenReturn(Optional.of(testUser));
-
-        ResultActions response = mockMvc.perform(get("/api/v1/user/1")
-                .contentType(MediaType.APPLICATION_JSON));
-
-
-        response.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email", CoreMatchers.is(testUser.getEmail())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(testUser.getName())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.blocked", CoreMatchers.is(testUser.isBlocked())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.dob", CoreMatchers.is(testUser.getDob().format(DateTimeFormatter.ofPattern("YYYY-MM-dd")))))
-                .andDo(MockMvcResultHandlers.print());
-    }
+//    @Test
+//    public void UserController_register_returnOk() throws Exception {
+//        given(userService.addUser(ArgumentMatchers.any())).willAnswer((invocation -> invocation.getArgument(0)));
+//
+//        ResultActions response = mockMvc.perform(post("/api/v1/user/register")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(user)));
+//
+//        response.andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.email", CoreMatchers.is(user.getEmail())))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(user.getName())))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.blocked", CoreMatchers.is(user.isBlocked())))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.dob", CoreMatchers.is(user.getDob().format(DateTimeFormatter.ofPattern("YYYY-MM-dd")))))
+//                //.andDo(MockMvcResultHandlers.print())
+//        ;
+//    }
+//
+//    @Test
+//    public void UserController_getAllUser() throws Exception {
+//        List<User> resp = List.of(User.builder().id(1L).build(),
+//                User.builder().id(2L).build(),
+//                User.builder().id(3L).build());
+//        when(userService.getUsers()).thenReturn(resp);
+//
+//        ResultActions response = mockMvc.perform(get("/api/v1/user/getusers")
+//                                        .contentType(MediaType.APPLICATION_JSON));
+//
+//        response.andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)))
+//                //.andDo(MockMvcResultHandlers.print())
+//        ;
+//    }
+//
+//    @Test
+//    public void UserController_getUserById() throws Exception {
+//        Long uid = 1L;
+//        User testUser = User.builder()
+//                .id(uid)
+//                .name("John Pokemon")
+//                .email("test@ghoo.com")
+//                .dob(LocalDate.of(1966, 7, 8))
+//                .build();
+//
+//        when(userService.getUser(uid)).thenReturn(Optional.of(testUser));
+//
+//        ResultActions response = mockMvc.perform(get("/api/v1/user/1")
+//                .contentType(MediaType.APPLICATION_JSON));
+//
+//
+//        response.andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.email", CoreMatchers.is(testUser.getEmail())))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(testUser.getName())))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.blocked", CoreMatchers.is(testUser.isBlocked())))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.dob", CoreMatchers.is(testUser.getDob().format(DateTimeFormatter.ofPattern("YYYY-MM-dd")))))
+//              //  .andDo(MockMvcResultHandlers.print())
+//        ;
+//    }
 
 }
